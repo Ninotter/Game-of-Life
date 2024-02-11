@@ -18,6 +18,17 @@ namespace GameOfLifeCore
             return startArray;
         }
 
+        public static bool[,] CreateArrayWithGlider(int rows, int columns)
+        {
+            bool[,] startArray = new bool[rows, columns];
+            startArray[0, 1] = true;
+            startArray[1, 2] = true;
+            startArray[2, 0] = true;
+            startArray[2, 1] = true;
+            startArray[2, 2] = true;
+            return startArray;
+        }
+
         public static bool[,] NextGeneration(bool[,] currentGeneration)
         { 
             int rows = currentGeneration.GetLength(0);
