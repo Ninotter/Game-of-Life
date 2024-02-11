@@ -1,0 +1,31 @@
+﻿using GameOfLifeCore;
+
+bool[,] currentGeneration = new bool[100, 25];
+Random rnd = new Random();
+for (int i = 0; i < currentGeneration.GetLength(0); i++)
+{
+    for (int j = 0; j < currentGeneration.GetLength(1); j++)
+    {
+        currentGeneration[i, j] = rnd.Next(0, 2) == 1;
+    }
+}
+
+while (true)
+{
+    Show(currentGeneration);
+    currentGeneration = GoLCore.NextGeneration(currentGeneration);
+    Console.ReadKey();
+}
+
+void Show(bool[,] cells)
+{
+    Console.Clear();
+    for (int i = 0; i < cells.GetLength(0); i++)
+    {
+        for (int j = 0; j < cells.GetLength(1); j++)
+        {
+            Console.Write(cells[i, j] ? "O" : " ");
+        }
+        Console.WriteLine();
+    }
+}
