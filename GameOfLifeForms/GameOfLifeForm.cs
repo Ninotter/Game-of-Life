@@ -18,12 +18,12 @@ namespace GameOfLifeForms
 
         private void StartGame(object? obj)
         {
-            bool[,] startArray = GoLCore.CreateRandomArray(100, 100);
+            bool[,] startArray = GoLCore.CreateRandomArray(180, 100);
             while (true)
             {
                 ReplaceBitmap(CreateConwayBitmap(startArray));
                 startArray = GoLCore.NextGeneration(startArray);
-                Thread.Sleep(50);
+                //Thread.Sleep(50);
             }
         }
 
@@ -31,7 +31,7 @@ namespace GameOfLifeForms
         {
             this.Invoke(new Action(() =>
             {
-                panelImage.BackgroundImage = bitmap;
+                pictureBoxGame.Image = bitmap;
             }));
         }
 

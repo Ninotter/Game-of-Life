@@ -28,35 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panelImage = new Panel();
+            pictureBoxGame = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxGame).BeginInit();
             SuspendLayout();
             // 
-            // panelImage
+            // pictureBoxGame
             // 
-            panelImage.BackColor = Color.Black;
-            panelImage.BackgroundImageLayout = ImageLayout.Center;
-            panelImage.Dock = DockStyle.Fill;
-            panelImage.Location = new Point(0, 0);
-            panelImage.Name = "panelImage";
-            panelImage.Size = new Size(800, 450);
-            panelImage.TabIndex = 0;
+            pictureBoxGame.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pictureBoxGame.BackColor = Color.Black;
+            pictureBoxGame.Location = new Point(0, 0);
+            pictureBoxGame.Name = "pictureBoxGame";
+            pictureBoxGame.Size = new Size(800, 450);
+            pictureBoxGame.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBoxGame.TabIndex = 0;
+            pictureBoxGame.TabStop = false;
             // 
             // GameOfLifeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(panelImage);
+            Controls.Add(pictureBoxGame);
             Name = "GameOfLifeForm";
             Text = "Game of Life";
             WindowState = FormWindowState.Maximized;
             FormClosing += GameOfLifeForm_FormClosing;
             Load += GameOfLifeForm_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBoxGame).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private Panel panelImage;
+        private PictureBox pictureBoxGame;
     }
 }
