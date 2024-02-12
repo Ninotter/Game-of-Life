@@ -1,10 +1,16 @@
-﻿using System;
-
-namespace GameOfLifeCore
+﻿namespace GameOfLifeAPI
 {
-    public static class GoLCore
+    public class GoLManager
     {
-        public static bool[,] CreateRandomArray(int rows, int columns)
+        public byte UnderPopulation { get; set; } = 2;
+        public byte OverPopulation { get; set; } = 3;
+        public byte Reproduction { get; set; } = 3;
+
+        public GoLManager()
+        {
+
+        }
+        public bool[,] CreateRandomArray(int rows, int columns)
         {
             bool[,] startArray = new bool[rows, columns];
             Random random = new Random();
@@ -18,7 +24,7 @@ namespace GameOfLifeCore
             return startArray;
         }
 
-        public static bool[,] CreateArrayWithGlider(int rows, int columns)
+        public bool[,] CreateArrayWithGlider(int rows, int columns)
         {
             bool[,] startArray = new bool[rows, columns];
             startArray[0, 1] = true;
@@ -29,8 +35,8 @@ namespace GameOfLifeCore
             return startArray;
         }
 
-        public static bool[,] NextGeneration(bool[,] currentGeneration)
-        { 
+        public bool[,] NextGeneration(bool[,] currentGeneration)
+        {
             int rows = currentGeneration.GetLength(0);
             int columns = currentGeneration.GetLength(1);
             bool[,] nextGeneration = new bool[rows, columns];
@@ -39,14 +45,14 @@ namespace GameOfLifeCore
                 for (int j = 0; j < columns; j++)
                 {
                     bool currentState = currentGeneration[i, j];
-                    byte aliveNeighborCount = GetAliveNeighborCount(i,j, currentGeneration);
-                    nextGeneration[i,j] = GetNextState(currentState, aliveNeighborCount);
+                    byte aliveNeighborCount = GetAliveNeighborCount(i, j, currentGeneration);
+                    nextGeneration[i, j] = GetNextState(currentState, aliveNeighborCount);
                 }
             }
             return nextGeneration;
         }
 
-        private static byte GetAliveNeighborCount(int i, int j, bool[,] currentGeneration)
+        private byte GetAliveNeighborCount(int i, int j, bool[,] currentGeneration)
         {
             int rows = currentGeneration.GetLength(0);
             int columns = currentGeneration.GetLength(1);
@@ -70,15 +76,11 @@ namespace GameOfLifeCore
             return aliveNeighborCount;
         }
 
-        private static bool GetNextState(bool currentState, byte aliveNeighborCount)
+        private bool GetNextState(bool currentState, byte aliveNeighborCount)
         {
             if (currentState)
             {
-                if (aliveNeighborCount < 2)
-                {
-                    return false;
-                }
-                if (aliveNeighborCount > 3)
+                if (aliveNeighborCount < UnderPopulation || aliveNeighborCount > OverPopulation)
                 {
                     return false;
                 }
@@ -86,7 +88,7 @@ namespace GameOfLifeCore
             }
             else
             {
-                if (aliveNeighborCount == 3)
+                if (aliveNeighborCount == Reproduction)
                 {
                     return true;
                 }

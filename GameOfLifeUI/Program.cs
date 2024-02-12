@@ -1,4 +1,4 @@
-﻿using GameOfLifeCore;
+﻿using GameOfLifeAPI;
 
 bool[,] currentGeneration = new bool[100, 25];
 Random rnd = new Random();
@@ -13,7 +13,8 @@ for (int i = 0; i < currentGeneration.GetLength(0); i++)
 while (true)
 {
     Show(currentGeneration);
-    currentGeneration = GoLCore.NextGeneration(currentGeneration);
+    GoLManager gc = new GoLManager();
+    currentGeneration = gc.NextGeneration(currentGeneration);
     Console.ReadKey();
 }
 
