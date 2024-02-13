@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLifeForms", "GameOfLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLifeAPI", "GameOfLifeAPI\GameOfLifeAPI.csproj", "{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerChat", "ServerChat\ServerChat.csproj", "{2A6B89DA-4FD4-42CF-8899-85FF4A0E9A52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +29,10 @@ Global
 		{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A6B89DA-4FD4-42CF-8899-85FF4A0E9A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A6B89DA-4FD4-42CF-8899-85FF4A0E9A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A6B89DA-4FD4-42CF-8899-85FF4A0E9A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A6B89DA-4FD4-42CF-8899-85FF4A0E9A52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
