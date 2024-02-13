@@ -36,7 +36,7 @@
             // labelConnecting
             // 
             labelConnecting.AutoSize = true;
-            labelConnecting.Location = new Point(346, 200);
+            labelConnecting.Location = new Point(350, 176);
             labelConnecting.Name = "labelConnecting";
             labelConnecting.Size = new Size(93, 20);
             labelConnecting.TabIndex = 0;
@@ -51,6 +51,8 @@
             textBoxChatInput.Size = new Size(776, 92);
             textBoxChatInput.TabIndex = 1;
             textBoxChatInput.Visible = false;
+            textBoxChatInput.KeyDown += textBoxChatInput_KeyDown;
+            textBoxChatInput.KeyPress += textBoxChatInput_KeyPress;
             // 
             // panelChatHistory
             // 
@@ -71,6 +73,7 @@
             Controls.Add(textBoxChatInput);
             Name = "ChatForm";
             Text = "ChatForm";
+            FormClosing += ChatForm_FormClosing;
             Load += ChatForm_Load;
             ResumeLayout(false);
             PerformLayout();

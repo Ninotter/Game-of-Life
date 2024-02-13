@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GameOfLifeAPI\GameOfLifeAPI.csproj" />
+    <ProjectReference Include="..\ServerChat\ServerChat.csproj" />
   </ItemGroup>
 
   <ItemGroup>

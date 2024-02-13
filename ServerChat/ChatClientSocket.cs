@@ -45,7 +45,7 @@ namespace ServerChat
             }
             Task.Run(async () =>
             {
-                while (true)
+                while (IsConnected)
                 {
                     byte[] buffer = new byte[1024];
                     await client.ReceiveAsync(buffer, SocketFlags.None);

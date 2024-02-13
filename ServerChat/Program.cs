@@ -20,10 +20,10 @@ Log.Write(LogType.Info, "Server socket started.");
 
 Task.Run(() =>
 {
-    Thread.Sleep(2000);
-    FakeTestClient();
-    Thread.Sleep(5000);
-    FakeTestClient();
+    //Thread.Sleep(2000);
+    //FakeTestClient();
+    //Thread.Sleep(5000);
+    //FakeTestClient();
 });
 
 while (true)
@@ -33,11 +33,17 @@ while (true)
     Socket clientSocket = await serverListener.AcceptAsync();
     Log.Write(LogType.Info, $"Client {clientSocket.AddressFamily} connected.");
 
-    ChatServerSocket client = new ChatServerSocket(clientSocket);
-    clients.Add(client);
-    client.Id = clients.Count;
-    client.Listen();
+    ChatServerSocket newClient = new ChatServerSocket(clientSocket);
+    foreach (var c in clients)
+    {
+        c.clients.Add(newClient);
+    }
+    newClient.clients.AddRange(clients);
+    clients.Add(newClient);
+    newClient.Id = clients.Count;
+    newClient.Listen();
 }
+
 
 async void FakeTestClient()
 {
@@ -52,19 +58,4 @@ async void FakeTestClient()
             Thread.Sleep(2000);
         }
     });
-
-    //using Socket client = new(
-    //serverIpEndPoint.AddressFamily,
-    //SocketType.Stream,
-    //ProtocolType.Tcp);
-
-    //await client.ConnectAsync(serverIpEndPoint);
-    //while (true)
-    //{
-    //    // Send message.
-    //    var message = "TESTTTT";
-    //    var messageBytes = Encoding.UTF8.GetBytes(message);
-    //    _ = await client.SendAsync(messageBytes, SocketFlags.None);
-    //    Thread.Sleep(2000);
-    //}
 }

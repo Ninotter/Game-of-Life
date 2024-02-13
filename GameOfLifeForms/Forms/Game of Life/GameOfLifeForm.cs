@@ -1,4 +1,5 @@
 using GameOfLifeAPI;
+using GameOfLifeForms.Forms.Chat;
 
 namespace GameOfLifeForms.Forms
 {
@@ -36,7 +37,8 @@ namespace GameOfLifeForms.Forms
                         ReplaceBitmap(CreateConwayBitmap(startArray));
                         startArray = GoLManager.NextGeneration(startArray);
                     }
-                }catch(ThreadInterruptedException)
+                }
+                catch (ThreadInterruptedException)
                 {
                     // Do nothing
                 }
@@ -84,6 +86,12 @@ namespace GameOfLifeForms.Forms
             registerForm.ShowDialog();
         }
 
+        private void OpenChatForm()
+        {
+            ChatForm chatForm = new ChatForm();
+            chatForm.Show();
+        }
+
         private void loginToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenLoginForm();
@@ -97,6 +105,11 @@ namespace GameOfLifeForms.Forms
         private void GameOfLifeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             refreshImageThread?.Interrupt();
+        }
+
+        private void chatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenChatForm();
         }
     }
 }

@@ -33,6 +33,7 @@
             userToolStripMenuItem = new ToolStripMenuItem();
             loginToolStripMenuItem = new ToolStripMenuItem();
             registerToolStripMenuItem = new ToolStripMenuItem();
+            chatToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBoxGame).BeginInit();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -52,7 +53,7 @@
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { userToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { userToolStripMenuItem, chatToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(914, 28);
@@ -69,16 +70,23 @@
             // loginToolStripMenuItem
             // 
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(224, 26);
+            loginToolStripMenuItem.Size = new Size(146, 26);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
             // registerToolStripMenuItem
             // 
             registerToolStripMenuItem.Name = "registerToolStripMenuItem";
-            registerToolStripMenuItem.Size = new Size(224, 26);
+            registerToolStripMenuItem.Size = new Size(146, 26);
             registerToolStripMenuItem.Text = "Register";
             registerToolStripMenuItem.Click += registerToolStripMenuItem_Click;
+            // 
+            // chatToolStripMenuItem
+            // 
+            chatToolStripMenuItem.Name = "chatToolStripMenuItem";
+            chatToolStripMenuItem.Size = new Size(53, 24);
+            chatToolStripMenuItem.Text = "Chat";
+            chatToolStripMenuItem.Click += chatToolStripMenuItem_Click;
             // 
             // GameOfLifeForm
             // 
@@ -108,5 +116,6 @@
         private ToolStripMenuItem userToolStripMenuItem;
         private ToolStripMenuItem loginToolStripMenuItem;
         private ToolStripMenuItem registerToolStripMenuItem;
+        private ToolStripMenuItem chatToolStripMenuItem;
     }
 }
