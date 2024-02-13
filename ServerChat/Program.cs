@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text;
 using ServerChat;
-using System.Runtime.CompilerServices;
 
 Log.Write(LogType.Info, "Start : ");
 

@@ -9,7 +9,7 @@ namespace ServerChat
 {
     internal static class Log
     {
-        static Color defaultColor = Color.White;
+        internal static Color defaultColor = Color.White;
         internal static void Write(LogType type, string message)
         {
             switch (type)

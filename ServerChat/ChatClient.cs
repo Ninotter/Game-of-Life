@@ -7,8 +7,8 @@ namespace ServerChat
     internal class ChatClient
     {
         private Socket _socket;
-        public int Id { get; set; }
-        public bool Stopped { get; set; } = false;
+        internal int Id { get; set; }
+        internal bool Stopped { get; set; } = false;
         internal ChatClient(Socket clientSocket)
         {
             _socket = clientSocket;
