@@ -26,7 +26,6 @@ Task.Run(() =>
     FakeTestClient();
 });
 
-
 while (true)
 {
     //Listen for incoming connections
@@ -42,18 +41,30 @@ while (true)
 
 async void FakeTestClient()
 {
-    using Socket client = new(
-    serverIpEndPoint.AddressFamily,
-    SocketType.Stream,
-    ProtocolType.Tcp);
+    ChatClientSocket client = new();
+    client.Connect();
+    Task.Run(async () => {
+        while (true)
+        {
+            // Send message.
+            var message = "TESTTTT";
+            client.SendMessage(message);
+            Thread.Sleep(2000);
+        }
+    });
 
-    await client.ConnectAsync(serverIpEndPoint);
-    while (true)
-    {
-        // Send message.
-        var message = "TESTTTT";
-        var messageBytes = Encoding.UTF8.GetBytes(message);
-        _ = await client.SendAsync(messageBytes, SocketFlags.None);
-        Thread.Sleep(2000);
-    }
+    //using Socket client = new(
+    //serverIpEndPoint.AddressFamily,
+    //SocketType.Stream,
+    //ProtocolType.Tcp);
+
+    //await client.ConnectAsync(serverIpEndPoint);
+    //while (true)
+    //{
+    //    // Send message.
+    //    var message = "TESTTTT";
+    //    var messageBytes = Encoding.UTF8.GetBytes(message);
+    //    _ = await client.SendAsync(messageBytes, SocketFlags.None);
+    //    Thread.Sleep(2000);
+    //}
 }

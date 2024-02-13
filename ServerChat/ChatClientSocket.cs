@@ -14,6 +14,14 @@ namespace ServerChat
         private const string SERVER_IP = "127.0.0.1";
         private Socket client;
 
+        public bool IsConnected => client != null && client.Connected;
+
+        public delegate void MessageReceived(string message);
+        public MessageReceived? OnMessageReceived;
+
+        public delegate void MessageSent(string message);
+        public MessageSent? OnMessageSent;
+
         public ChatClientSocket()
         {
             IPAddress serverIpAdress = IPAddress.Parse(SERVER_IP);
@@ -25,23 +33,16 @@ namespace ServerChat
 
         public async void Connect()
         {
-            Task tsk = new Task( async() => { 
-                await client.ConnectAsync(SERVER_IP, SERVER_PORT);
-            });
-            await tsk.WaitAsync(TimeSpan.FromSeconds(10)); // tries for 10 seconds
-            if (tsk.IsCompleted)
-            {
-                return;
-            }
-            else
-            {
-                throw new TimeoutException("Couldnt access socket.");
-            }
+            await client.ConnectAsync(SERVER_IP, SERVER_PORT);
         }
 
 
         public void Listen()
         {
+            if(!IsConnected)
+            {
+                throw new InvalidOperationException("Client is not connected.");
+            }
             Task.Run(async () =>
             {
                 while (true)
@@ -49,13 +50,29 @@ namespace ServerChat
                     byte[] buffer = new byte[1024];
                     await client.ReceiveAsync(buffer, SocketFlags.None);
                     string message = Encoding.UTF8.GetString(buffer).Trim('\0');
+                    OnMessageReceived?.Invoke(message);
                 }
             });
         }
+
         public void SendMessage(string message)
         {
+            if (!IsConnected)
+            {
+                throw new InvalidOperationException("Client is not connected.");
+            }
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
             client.SendAsync(messageBytes, SocketFlags.None);
+            OnMessageSent?.Invoke(message);
+        }
+
+        public void Disconnect()
+        {
+            if (!IsConnected)
+            {
+                throw new InvalidOperationException("Client is not connected.");
+            }
+            client.Disconnect(false);
         }
     }
 }
