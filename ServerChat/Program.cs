@@ -5,7 +5,7 @@ using ServerChat;
 
 Log.Write(LogType.Info, "Start : ");
 
-List<ChatClient> clients = new List<ChatClient>();
+List<ChatServerSocket> clients = new List<ChatServerSocket>();
 const int SERVER_PORT = 11_000;
 
 Log.Write(LogType.Info, "Starting up dispatcher socket...");
@@ -34,7 +34,7 @@ while (true)
     Socket clientSocket = await serverListener.AcceptAsync();
     Log.Write(LogType.Info, $"Client {clientSocket.AddressFamily} connected.");
 
-    ChatClient client = new ChatClient(clientSocket);
+    ChatServerSocket client = new ChatServerSocket(clientSocket);
     clients.Add(client);
     client.Id = clients.Count;
     client.Listen();

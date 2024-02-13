@@ -4,12 +4,12 @@ using System.Text;
 
 namespace ServerChat
 {
-    internal class ChatClient
+    internal class ChatServerSocket
     {
         private Socket _socket;
         internal int Id { get; set; }
         internal bool Stopped { get; set; } = false;
-        internal ChatClient(Socket clientSocket)
+        internal ChatServerSocket(Socket clientSocket)
         {
             _socket = clientSocket;
         }
@@ -22,7 +22,7 @@ namespace ServerChat
                     await _socket.ReceiveAsync(buffer, SocketFlags.None);
                     Log.Write(LogType.Warning, "Received message");
                     string message = Encoding.UTF8.GetString(buffer).Trim('\0');
-                    Log.Write(LogType.Info, $"Message received from Task {this.Id} {message}");
+                    Log.Write(LogType.Info, $"Message received from Task {this.Id} : {message}");
                 }
             });
         }

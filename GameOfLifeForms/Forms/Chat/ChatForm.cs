@@ -17,6 +17,21 @@ namespace GameOfLifeForms.Forms.Chat
             InitializeComponent();
         }
 
+        private void ChatForm_Load(object sender, EventArgs e)
+        {
+            TryConnect();
+        }
 
+        private void TryConnect()
+        {
+            try
+            {
+                // Connect to the server
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
