@@ -1,6 +1,6 @@
 ﻿using GameOfLifeAPI;
 
-bool[,] currentGeneration = new bool[100, 25];
+bool[,] currentGeneration = new bool[25, 100];
 Random rnd = new Random();
 for (int i = 0; i < currentGeneration.GetLength(0); i++)
 {
