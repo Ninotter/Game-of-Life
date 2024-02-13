@@ -1,4 +1,4 @@
-﻿namespace GameOfLifeForms
+﻿namespace GameOfLifeForms.Forms
 {
     partial class GameOfLifeForm
     {

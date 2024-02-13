@@ -1,7 +1,6 @@
 using GameOfLifeAPI;
-using GameOfLifeForms.Forms;
 
-namespace GameOfLifeForms
+namespace GameOfLifeForms.Forms
 {
     internal partial class GameOfLifeForm : Form, IGameOfLifeHost
     {

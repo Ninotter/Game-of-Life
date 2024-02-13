@@ -7,7 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLifeUI", "GameOfLifeU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLifeForms", "GameOfLifeForms\GameOfLifeForms.csproj", "{86C66CC8-3B65-4E88-BB3D-B543A7C83028}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLifeAPI", "GameOfLifeAPI\GameOfLifeAPI.csproj", "{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameOfLifeAPI", "GameOfLifeAPI\GameOfLifeAPI.csproj", "{F8944CA4-CCC6-4F33-8606-3E11B6BF9F14}"
+EndProject
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
