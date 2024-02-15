@@ -95,10 +95,14 @@ namespace GameOfLifeForms.Forms
 
         private void ChatForm_OnRuleMatched(byte underpopulation, byte overpopulation, byte reproduction)
         {
-            Underpopulation = underpopulation;
-            Overpopulation = overpopulation;
-            Reproduction = reproduction;
-            StartGame();
+            string messageBox = $"Do you want to apply the rule: Underpopulation: {underpopulation}, Overpopulation: {overpopulation}, Reproduction: {reproduction}?";
+            if (MessageBox.Show(messageBox, "Allow rule", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Underpopulation = underpopulation;
+                Overpopulation = overpopulation;
+                Reproduction = reproduction;
+                StartGame();
+            }
         }
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e)
