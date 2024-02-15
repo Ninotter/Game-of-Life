@@ -15,6 +15,9 @@ namespace GameOfLifeForms.Forms.Chat
     {
         private ChatClientSocket _client;
 
+        public delegate void RuleMatchedHandler(byte underpopulation, byte overpopulation, byte reproduction);
+        public event RuleMatchedHandler OnRuleMatched;
+
         public ChatForm()
         {
             InitializeComponent();
@@ -35,6 +38,14 @@ namespace GameOfLifeForms.Forms.Chat
                 return;
             }
             AddExternalMessage(message);
+            if (GameOfLifeParser.ContainsRule(message))
+            {
+                var array = GameOfLifeParser.ParseRule(message);
+                byte underpopulation = array.Item1;
+                byte overpopulation = array.Item2;
+                byte reproduciton = array.Item3;
+                OnRuleMatched?.Invoke(underpopulation, overpopulation, reproduciton);
+            }
         }
 
         private void ShowChat()

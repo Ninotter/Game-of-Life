@@ -89,7 +89,16 @@ namespace GameOfLifeForms.Forms
         private void OpenChatForm()
         {
             ChatForm chatForm = new ChatForm();
+            chatForm.OnRuleMatched += ChatForm_OnRuleMatched;
             chatForm.Show();
+        }
+
+        private void ChatForm_OnRuleMatched(byte underpopulation, byte overpopulation, byte reproduction)
+        {
+            Underpopulation = underpopulation;
+            Overpopulation = overpopulation;
+            Reproduction = reproduction;
+            StartGame();
         }
 
         private void loginToolStripMenuItem_Click(object sender, EventArgs e)
