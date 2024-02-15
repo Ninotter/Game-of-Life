@@ -48,9 +48,10 @@
             pictureBoxGame.Margin = new Padding(3, 4, 3, 4);
             pictureBoxGame.Name = "pictureBoxGame";
             pictureBoxGame.Size = new Size(914, 568);
-            pictureBoxGame.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBoxGame.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBoxGame.TabIndex = 0;
             pictureBoxGame.TabStop = false;
+            pictureBoxGame.Click += pictureBoxGame_Click;
             // 
             // menuStrip1
             // 
@@ -100,7 +101,7 @@
             trackBarSpeed.Size = new Size(56, 130);
             trackBarSpeed.TabIndex = 2;
             trackBarSpeed.TickStyle = TickStyle.Both;
-            trackBarSpeed.Value = 1;
+            trackBarSpeed.Value = 10;
             trackBarSpeed.Scroll += trackBarSpeed_Scroll;
             // 
             // GameOfLifeForm

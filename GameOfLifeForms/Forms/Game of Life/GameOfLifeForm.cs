@@ -11,6 +11,10 @@ namespace GameOfLifeForms.Forms
 
         private GoLManager GoLManager { get; set; }
 
+        bool[,] golArray;
+
+        List<Action> awaitingEvents = new List<Action>();
+
         public byte Underpopulation { get => GoLManager.UnderPopulation; set { GoLManager.UnderPopulation = value; } }
         public byte Overpopulation { get => GoLManager.OverPopulation; set { GoLManager.OverPopulation = value; } }
         public byte Reproduction { get => GoLManager.Reproduction; set { GoLManager.Reproduction = value; } }
@@ -31,13 +35,14 @@ namespace GameOfLifeForms.Forms
             refreshImageThread?.Interrupt();
             Thread t = new Thread(() =>
             {
-                bool[,] startArray = GoLManager.CreateRandomArray(180, 100);
+                golArray = GoLManager.CreateRandomArray(180, 100);
                 try
                 {
                     while (true)
                     {
-                        ReplaceBitmap(CreateConwayBitmap(startArray));
-                        startArray = GoLManager.NextGeneration(startArray);
+                        ReplaceBitmap(CreateConwayBitmap(golArray));
+                        golArray = GoLManager.NextGeneration(golArray);
+                        HandleAwaitingEvents();
                         Thread.Sleep(SleepSpeed);
                     }
                 }
@@ -48,6 +53,15 @@ namespace GameOfLifeForms.Forms
             });
             refreshImageThread = t;
             refreshImageThread.Start();
+        }
+
+        private void HandleAwaitingEvents()
+        {
+            foreach (Action action in awaitingEvents)
+            {
+                action.Invoke();
+            }
+            awaitingEvents.Clear();
         }
 
         private void ReplaceBitmap(Bitmap bitmap)
@@ -118,6 +132,26 @@ namespace GameOfLifeForms.Forms
         private void trackBarSpeed_Scroll(object sender, EventArgs e)
         {
             SleepSpeed = 1000 - trackBarSpeed.Value * 100;
+        }
+
+        private void pictureBoxGame_Click(object sender, EventArgs e)
+        {
+            //get x and y of the click
+            int x = ((MouseEventArgs)e).X / 9;
+            int y = ((MouseEventArgs)e).Y / 9;
+
+            Action action = () =>
+            {
+                try
+                {
+                    golArray = GoLManager.AddGlider(golArray, x, y);
+                }
+                catch
+                {
+                    // empty on purpose
+                }
+            };
+            awaitingEvents.Add(action);
         }
     }
 }

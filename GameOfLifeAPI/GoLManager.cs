@@ -35,6 +35,24 @@
             return startArray;
         }
 
+        public bool[,] AddGlider(bool[,] currentArray, int x, int y)
+        {
+            bool[,] newArray = new bool[currentArray.GetLength(0), currentArray.GetLength(1)];
+            for (int i = 0; i < currentArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < currentArray.GetLength(1); j++)
+                {
+                    newArray[i, j] = currentArray[i, j];
+                }
+            }
+            newArray[x, y] = true;
+            newArray[x + 1, y + 2] = true;
+            newArray[x + 2, y] = true;
+            newArray[x + 2, y + 1] = true;
+            newArray[x + 2, y + 2] = true;
+            return newArray;
+        }
+
         public bool[,] NextGeneration(bool[,] currentGeneration)
         {
             int rows = currentGeneration.GetLength(0);
