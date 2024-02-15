@@ -7,6 +7,8 @@ namespace GameOfLifeForms.Forms
     {
         Thread refreshImageThread;
 
+        private int SleepSpeed { get; set; }
+
         private GoLManager GoLManager { get; set; }
 
         public byte Underpopulation { get => GoLManager.UnderPopulation; set { GoLManager.UnderPopulation = value; } }
@@ -36,6 +38,7 @@ namespace GameOfLifeForms.Forms
                     {
                         ReplaceBitmap(CreateConwayBitmap(startArray));
                         startArray = GoLManager.NextGeneration(startArray);
+                        Thread.Sleep(SleepSpeed);
                     }
                 }
                 catch (ThreadInterruptedException)
@@ -110,6 +113,11 @@ namespace GameOfLifeForms.Forms
         private void chatToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenChatForm();
+        }
+
+        private void trackBarSpeed_Scroll(object sender, EventArgs e)
+        {
+            SleepSpeed = 1000 - trackBarSpeed.Value * 100;
         }
     }
 }

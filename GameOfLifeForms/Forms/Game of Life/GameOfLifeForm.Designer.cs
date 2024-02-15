@@ -34,8 +34,10 @@
             loginToolStripMenuItem = new ToolStripMenuItem();
             registerToolStripMenuItem = new ToolStripMenuItem();
             chatToolStripMenuItem = new ToolStripMenuItem();
+            trackBarSpeed = new TrackBar();
             ((System.ComponentModel.ISupportInitialize)pictureBoxGame).BeginInit();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpeed).BeginInit();
             SuspendLayout();
             // 
             // pictureBoxGame
@@ -88,11 +90,25 @@
             chatToolStripMenuItem.Text = "Chat";
             chatToolStripMenuItem.Click += chatToolStripMenuItem_Click;
             // 
+            // trackBarSpeed
+            // 
+            trackBarSpeed.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            trackBarSpeed.Location = new Point(846, 49);
+            trackBarSpeed.Minimum = 1;
+            trackBarSpeed.Name = "trackBarSpeed";
+            trackBarSpeed.Orientation = Orientation.Vertical;
+            trackBarSpeed.Size = new Size(56, 130);
+            trackBarSpeed.TabIndex = 2;
+            trackBarSpeed.TickStyle = TickStyle.Both;
+            trackBarSpeed.Value = 1;
+            trackBarSpeed.Scroll += trackBarSpeed_Scroll;
+            // 
             // GameOfLifeForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(914, 600);
+            Controls.Add(trackBarSpeed);
             Controls.Add(pictureBoxGame);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
@@ -105,6 +121,7 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxGame).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpeed).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -117,5 +134,6 @@
         private ToolStripMenuItem loginToolStripMenuItem;
         private ToolStripMenuItem registerToolStripMenuItem;
         private ToolStripMenuItem chatToolStripMenuItem;
+        private TrackBar trackBarSpeed;
     }
 }
