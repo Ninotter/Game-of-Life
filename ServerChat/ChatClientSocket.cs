@@ -22,6 +22,9 @@ namespace ServerChat
         public delegate void MessageSent(string message);
         public MessageSent? OnMessageSent;
 
+        public delegate void Disconnecting();
+        public Disconnecting? OnDisconnect;
+
         public ChatClientSocket()
         {
             IPAddress serverIpAdress = IPAddress.Parse(SERVER_IP);
@@ -35,7 +38,6 @@ namespace ServerChat
         {
             await client.ConnectAsync(SERVER_IP, SERVER_PORT);
         }
-
 
         public void Listen()
         {
@@ -72,6 +74,7 @@ namespace ServerChat
             {
                 throw new InvalidOperationException("Client is not connected.");
             }
+            OnDisconnect?.Invoke();
             client.Disconnect(false);
         }
     }

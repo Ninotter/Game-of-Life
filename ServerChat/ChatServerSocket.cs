@@ -9,7 +9,10 @@ namespace ServerChat
         private Socket clientSocket;
         public List<ChatServerSocket> clients = new List<ChatServerSocket>();
         internal int Id { get; set; }
-        internal bool Stopped { get; set; } = false;
+
+        public delegate void Disconnected(ChatServerSocket serverSocket);
+        public Disconnected? OnDisconnected;
+
         internal ChatServerSocket(Socket clientSocket)
         {
             this.clientSocket = clientSocket;
@@ -18,7 +21,7 @@ namespace ServerChat
         internal void Listen()
         {
             Task.Run(async () => { 
-                while (!Stopped || !clientSocket.Connected) { 
+                while (clientSocket.Connected) { 
                     byte[] buffer = new byte[1024];
                     await clientSocket.ReceiveAsync(buffer, SocketFlags.None);
                     Log.Write(LogType.Warning, "Received message");
@@ -26,6 +29,7 @@ namespace ServerChat
                     Log.Write(LogType.Info, $"Message received from Task {this.Id} : {message}");
                     BroadcastMessage(message);
                 }
+                OnClientDisconnected();
             });
         }
 
@@ -35,6 +39,14 @@ namespace ServerChat
             {
                 client.SendMessage(message);
             }
+        }
+
+        private void OnClientDisconnected()
+        {
+            clientSocket.Disconnect(false);
+            clients.Remove(this);
+            clientSocket.Close();
+            OnDisconnected?.Invoke(this);
         }
 
         internal void SendMessage(string message)

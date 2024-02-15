@@ -30,10 +30,15 @@ while (true)
 {
     //Listen for incoming connections
     Log.Write(LogType.Info, "Waiting for incoming connections...");
-    Socket clientSocket = await serverListener.AcceptAsync();
-    Log.Write(LogType.Info, $"Client {clientSocket.AddressFamily} connected.");
+    Socket serverSocket = await serverListener.AcceptAsync();
+    Log.Write(LogType.Info, $"Client {serverSocket.AddressFamily} connected.");
 
-    ChatServerSocket newClient = new ChatServerSocket(clientSocket);
+    ChatServerSocket newClient = new ChatServerSocket(serverSocket);
+    newClient.OnDisconnected += (client) =>
+    {
+        Log.Write(LogType.Info, $"Client {client.Id} disconnected.");
+        clients.Remove(client);
+    };
     foreach (var c in clients)
     {
         c.clients.Add(newClient);
