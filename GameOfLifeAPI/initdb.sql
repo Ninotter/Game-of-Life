@@ -1,9 +1,0 @@
-CREATE TABLE IF NOT EXISTS User (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
-    password TEXT NOT NULL,
-    underpopulation INTEGER NOT NULL,
-    overpopulation INTEGER NOT NULL,
-    reproduction INTEGER NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
