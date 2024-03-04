@@ -1,78 +1,96 @@
-﻿using Microsoft.Data.Sqlite;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
+using SQLiteNetExtensions.Extensions;
+using GameOfLifeAPI.Entities;
+using SQLite;
 
 namespace GameOfLifeAPI
 {
     public class DbConnect : IDisposable
     {
-        private SqliteConnection _conn;
+        private SQLiteConnection? _conn;
         public DbConnect(string dbPath)
         {
-            _conn = new SqliteConnection($"Data Source={dbPath}");
-            _conn.Open();
+            Connect(dbPath);
+        }
+
+        private void Connect(string dbPath)
+        {
+            if (_conn == null)
+            {
+                SQLiteConnectionString connectionString = new SQLiteConnectionString(dbPath, true);
+                _conn = new SQLiteConnection(connectionString);
+            }
+            CreateAllTables();
         }
 
         public void Dispose()
         {
-            _conn.Close();
+            _conn?.Close();
+        }
+
+        internal int CreateTable<T>() where T : IEntity
+        {
+            var result = _conn.CreateTable<T>();
+            if (result == CreateTableResult.Created)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public void CreateAllTables()
+        {
+            CreateTable<User>();
+            //var baseEntity = typeof(IEntity);
+            //var types = AppDomain.CurrentDomain.GetAssemblies()
+            //    .SelectMany(s => s.GetTypes())
+            //    .Where(p => baseEntity.IsAssignableFrom(p) && p != baseEntity);
+
+            //foreach (Type t in types)
+            //{
+            //    _conn.CreateTable(t);
+            //}
         }
 
         public User Login(string username, string password)
         {
             byte[] hash = GenerateHash(password);
-            var command = _conn.CreateCommand();
-            command.CommandText = "SELECT username, underpopulation, overpopulation, reproduction FROM user WHERE username = @username AND password = @password";
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", hash);
-            using (var reader = command.ExecuteReader())
+            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
+            User connected = new User()
             {
-                if (!reader.Read())
-                {
-                    throw new Exception("Invalid username or password");
-                }
-                else
-                {
-                    return new User
-                    {
-                        Username = reader.GetString(0),
-                        Underpopulation = reader.GetByte(1),
-                        Overpopulation = reader.GetByte(2),
-                        Reproduction = reader.GetByte(3)
-                    };
-                }
+                Username = username,
+                PasswordUser = hashedPw
+            };
+            string query = "SELECT * FROM User WHERE Username = ? AND PasswordUser = ?";
+            connected = _conn.FindWithQuery<User>(query, connected.Username, connected.PasswordUser);
+            if (connected is null)
+            {
+                throw new Exception("Invalid credentials, or the user does not exist.");
             }
+            return connected;
         }
 
         public void Register(string username, string password, int underpopulation, int overpopulation, int reproduction)
         {
             byte[] hash = GenerateHash(password);
-            var command = _conn.CreateCommand();
-            command.CommandText = "INSERT INTO user (username, password, underpopulation, overpopulation, reproduction) VALUES (@username, @password, @underpopulation, @overpopulation, @reproduction)";
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", hash);
-            command.Parameters.AddWithValue("@underpopulation", underpopulation);
-            command.Parameters.AddWithValue("@overpopulation", overpopulation);
-            command.Parameters.AddWithValue("@reproduction", reproduction);
-            int result = command.ExecuteNonQuery();
-            if (result < 0)
+            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
+            var newUser = new User()
             {
-                throw new System.Exception("Error registering user");
-            }
+                Username = username,
+                PasswordUser = hashedPw,
+                Underpopulation = (byte)underpopulation,
+                Overpopulation = (byte)overpopulation,
+                Reproduction = (byte)reproduction
+            };
+            Register(newUser);
         }
 
-        public void Register(User user)
+        private void Register(User user)
         {
-            var command = _conn.CreateCommand();
-            command.CommandText = "INSERT INTO user (username, underpopulation, overpopulation, reproduction) VALUES (@username, @underpopulation, @overpopulation, @reproduction)";
-            command.Parameters.AddWithValue("@username", user.Username);
-            command.Parameters.AddWithValue("@underpopulation", user.Underpopulation);
-            command.Parameters.AddWithValue("@overpopulation", user.Overpopulation);
-            command.Parameters.AddWithValue("@reproduction", user.Reproduction);
-            int result = command.ExecuteNonQuery();
-            if (result < 0)
-            {
-                throw new System.Exception("Error registering user");
-            }
+            _conn.Insert(user);
         }
 
         private byte[] GenerateHash(string password)
