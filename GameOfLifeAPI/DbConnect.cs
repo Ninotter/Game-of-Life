@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using SQLiteNetExtensions.Extensions;
 using GameOfLifeAPI.Entities;
 using SQLite;
 
@@ -8,6 +7,9 @@ namespace GameOfLifeAPI
     public class DbConnect : IDisposable
     {
         private SQLiteConnection? _conn;
+        private const int MAXIMUM_USERNAME_LENGTH = 20;
+        private const int MINIMUM_USERNAME_LENGTH = 6;
+        private const int MINIMUM_PASSWORD_LENGTH = 6;
         public DbConnect(string dbPath)
         {
             Connect(dbPath);
@@ -57,13 +59,15 @@ namespace GameOfLifeAPI
 
         public User Login(string username, string password)
         {
-            byte[] hash = GenerateHash(password);
-            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
             User connected = new User()
             {
                 Username = username,
-                PasswordUser = hashedPw
+                PasswordUser = password
             };
+            VerifyUserFieldsAreValid(connected);
+            byte[] hash = GenerateHash(password);
+            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
+            connected.PasswordUser = hashedPw;
             string query = "SELECT * FROM User WHERE Username = ? AND PasswordUser = ?";
             connected = _conn.FindWithQuery<User>(query, connected.Username, connected.PasswordUser);
             if (connected is null)
@@ -73,23 +77,58 @@ namespace GameOfLifeAPI
             return connected;
         }
 
+        private bool VerifyUserFieldsAreValid(User user)
+        {
+            if(user.Username is not null)
+            {
+                if (user.Username.Length < MINIMUM_PASSWORD_LENGTH)
+                {
+                    throw new Exception("Username must be at least 6 characters long.");
+                }
+                if (user.Username.Length > MAXIMUM_USERNAME_LENGTH)
+                {
+                    throw new Exception("Username must be at most 20 characters long.");
+                }
+            }
+            if (user.PasswordUser is not null)
+            {
+                if (user.PasswordUser.Length < MINIMUM_PASSWORD_LENGTH)
+                {
+                    throw new Exception("Password must be at least 6 characters long.");
+                }
+            }
+            return true;
+        }
+
         public void Register(string username, string password, int underpopulation, int overpopulation, int reproduction)
         {
-            byte[] hash = GenerateHash(password);
-            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
             var newUser = new User()
             {
                 Username = username,
-                PasswordUser = hashedPw,
+                PasswordUser = password,
                 Underpopulation = (byte)underpopulation,
                 Overpopulation = (byte)overpopulation,
                 Reproduction = (byte)reproduction
             };
+            VerifyUserFieldsAreValid(newUser);
+            byte[] hash = GenerateHash(password);
+            string hashedPw = System.Text.Encoding.UTF8.GetString(hash);
+            newUser.PasswordUser = hashedPw;
             Register(newUser);
+        }
+
+        private void VerifyUserExists(string username)
+        {
+            User user = _conn.Find<User>(u => u.Username == username);
+            if (user != null)
+            {
+                throw new Exception("Username already exists.");
+            }
         }
 
         private void Register(User user)
         {
+            VerifyUserExists(user.Username);
             _conn.Insert(user);
         }
 

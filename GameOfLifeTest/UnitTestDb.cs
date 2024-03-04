@@ -1,4 +1,5 @@
 ﻿using GameOfLifeAPI;
+using GameOfLifeAPI.Entities;
 
 namespace GameOfLifeTest
 {
@@ -10,20 +11,14 @@ namespace GameOfLifeTest
         private const string PASSWORD = "testPassword";
 
         [TestInitialize]
-        public void Init()
-        {
-
-        }
-
         [TestCleanup]
-        public void CleanUp()
+        public void Init()
         {
             if (File.Exists(DB_PATH))
             {
                 File.Delete(DB_PATH);
             }
         }
-
 
         [TestMethod]
         public void RegisterAndLogin()
