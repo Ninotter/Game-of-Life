@@ -4,6 +4,10 @@ namespace GameOfLifeTest
     [TestClass]
     public class UnitTestGameOfLifeApi
     {
+        /// <summary>
+        /// Tests the Game of Life with a 2x2 array
+        /// The generation should never change with a 2x2 array of all alive cells
+        /// </summary>
         [TestMethod]
         public void Test2by2Array()
         {

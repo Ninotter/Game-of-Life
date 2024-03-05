@@ -43,9 +43,15 @@ namespace GameOfLifeAPI
             }
         }
 
+        /// <summary>
+        /// Creates all the tables if they dont exist in the database
+        /// </summary>
         public void CreateAllTables()
         {
             CreateTable<User>();
+
+            //Dynamic approach : this is not used due to its cost, but it can be used when the project is bigger
+
             //var baseEntity = typeof(IEntity);
             //var types = AppDomain.CurrentDomain.GetAssemblies()
             //    .SelectMany(s => s.GetTypes())
@@ -57,6 +63,13 @@ namespace GameOfLifeAPI
             //}
         }
 
+        /// <summary>
+        /// Login method that checks if the user exists and if the password is correct
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public User Login(string username, string password)
         {
             User connected = new User()
@@ -77,6 +90,12 @@ namespace GameOfLifeAPI
             return connected;
         }
 
+        /// <summary>
+        /// Verify if the user fields follow pre-defined rules
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         private bool VerifyUserFieldsAreValid(User user)
         {
             if(user.Username is not null)
@@ -100,6 +119,14 @@ namespace GameOfLifeAPI
             return true;
         }
 
+        /// <summary>
+        /// Register method that creates a new user in the database using all required fields
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="underpopulation"></param>
+        /// <param name="overpopulation"></param>
+        /// <param name="reproduction"></param>
         public void Register(string username, string password, int underpopulation, int overpopulation, int reproduction)
         {
             var newUser = new User()
@@ -117,6 +144,11 @@ namespace GameOfLifeAPI
             Register(newUser);
         }
 
+        /// <summary>
+        /// Verify if the username already exists in the database
+        /// </summary>
+        /// <param name="username"></param>
+        /// <exception cref="Exception"></exception>
         private void VerifyUserExists(string username)
         {
             User user = _conn.Find<User>(u => u.Username == username);
@@ -126,12 +158,21 @@ namespace GameOfLifeAPI
             }
         }
 
+        /// <summary>
+        /// Register method that creates a new user in the database using a User object
+        /// </summary>
+        /// <param name="user"></param>
         private void Register(User user)
         {
             VerifyUserExists(user.Username);
             _conn.Insert(user);
         }
 
+        /// <summary>
+        /// Generate a hash from a clear text password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         private byte[] GenerateHash(string password)
         {
             HashAlgorithm hashAlgorithm = new SHA256CryptoServiceProvider();

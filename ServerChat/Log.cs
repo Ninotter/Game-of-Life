@@ -1,6 +1,9 @@
 ﻿using System.Drawing;
 namespace ServerChat
 {
+    /// <summary>
+    /// Custom log class for socket server
+    /// </summary>
     internal static class Log
     {
         internal static Color defaultColor = Color.White;

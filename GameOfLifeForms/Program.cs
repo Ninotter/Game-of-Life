@@ -5,9 +5,15 @@ using System.Runtime;
 
 namespace GameOfLifeForms
 {
+    /// <summary>
+    /// WinForm program for the Game of Life application
+    /// </summary>
     internal static class Program
     {
         public static IConfiguration Configuration;
+        /// <summary>
+        /// The path to the SQLite database
+        /// </summary>
         public static string SqliteDbPath { get; private set; }
         /// <summary>
         ///  The main entry point for the application.
@@ -16,12 +22,19 @@ namespace GameOfLifeForms
         static void Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args).Build();
-            var builder = new ConfigurationBuilder()
-            .AddJsonFile("config.json", optional: false, reloadOnChange: true);
-            Configuration = builder.Build();
-            SqliteDbPath = Program.Configuration.GetSection("SQLITE_DB_PATH").Get<string>();
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            try
+            {
+                //Retrieving the configuration from the config.json file
+                var builder = new ConfigurationBuilder()
+                .AddJsonFile("config.json", optional: false, reloadOnChange: true);
+                Configuration = builder.Build();
+                //Setting the SQLite database path
+                SqliteDbPath = Program.Configuration.GetSection("SQLITE_DB_PATH").Get<string>();
+            }
+            catch
+            {
+                MessageBox.Show("Error reading config.json file. Please make sure it exists and is properly formatted.");
+            }
             ApplicationConfiguration.Initialize();
             Application.Run(new GameOfLifeForm());
             Environment.Exit(0);

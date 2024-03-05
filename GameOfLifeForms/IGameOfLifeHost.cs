@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace GameOfLifeForms
 {
-
+    /// <summary>
+    /// Interface for any object that can host a Game of Life
+    /// </summary>
     public interface IGameOfLifeHost
     {
         byte Underpopulation { get; set; }

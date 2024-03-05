@@ -10,6 +10,10 @@ namespace GameOfLifeTest
         private const string USERNAME = "testUser";
         private const string PASSWORD = "testPassword";
 
+
+        /// <summary>
+        /// Cleans the database before and after each test
+        /// </summary>
         [TestInitialize]
         [TestCleanup]
         public void Init()

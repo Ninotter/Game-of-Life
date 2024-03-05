@@ -1,5 +1,9 @@
 ﻿namespace GameOfLifeAPI
 {
+    /// <summary>
+    /// Game of Life game manager
+    /// Manages game rule and handles future iterations
+    /// </summary>
     public class GoLManager
     {
         public byte UnderPopulation { get; set; } = 2;
@@ -10,6 +14,13 @@
         {
 
         }
+
+        /// <summary>
+        /// Create a random 2 dimensional array of booleans
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
         public bool[,] CreateRandomArray(int rows, int columns)
         {
             bool[,] startArray = new bool[rows, columns];
@@ -24,17 +35,15 @@
             return startArray;
         }
 
-        public bool[,] CreateArrayWithGlider(int rows, int columns)
-        {
-            bool[,] startArray = new bool[rows, columns];
-            startArray[0, 1] = true;
-            startArray[1, 2] = true;
-            startArray[2, 0] = true;
-            startArray[2, 1] = true;
-            startArray[2, 2] = true;
-            return startArray;
-        }
-
+        /// <summary>
+        /// Adds a glider to the current array to the specified position
+        /// Will throw an exception if the glider is out of bounds
+        /// </summary>
+        /// <param name="currentArray"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <exception cref="IndexOutOfRangeException">Thrown if the glider is out of bounds</exception>
+        /// <returns></returns>
         public bool[,] AddGlider(bool[,] currentArray, int x, int y)
         {
             bool[,] newArray = new bool[currentArray.GetLength(0), currentArray.GetLength(1)];
@@ -53,6 +62,11 @@
             return newArray;
         }
 
+        /// <summary>
+        /// Returns the next generation of the generation in parameter
+        /// </summary>
+        /// <param name="currentGeneration"></param>
+        /// <returns>Next generation</returns>
         public bool[,] NextGeneration(bool[,] currentGeneration)
         {
             int rows = currentGeneration.GetLength(0);
@@ -70,6 +84,13 @@
             return nextGeneration;
         }
 
+        /// <summary>
+        /// Private method used to get the number of living neighbors of a cell
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="j"></param>
+        /// <param name="currentGeneration"></param>
+        /// <returns></returns>
         private byte GetAliveNeighborCount(int i, int j, bool[,] currentGeneration)
         {
             int rows = currentGeneration.GetLength(0);
@@ -94,6 +115,12 @@
             return aliveNeighborCount;
         }
 
+        /// <summary>
+        /// Private method used to get the next state of a cell considering its current state and the number of living neighbors
+        /// </summary>
+        /// <param name="currentState"></param>
+        /// <param name="aliveNeighborCount"></param>
+        /// <returns></returns>
         private bool GetNextState(bool currentState, byte aliveNeighborCount)
         {
             if (currentState)

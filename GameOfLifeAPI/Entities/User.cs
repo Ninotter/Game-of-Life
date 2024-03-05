@@ -2,6 +2,9 @@
 
 namespace GameOfLifeAPI.Entities
 {
+    /// <summary>
+    /// Represents a user in the database, with its username, password and the rules of the game
+    /// </summary>
     [Table("User")]
     public record User : IEntity
     {

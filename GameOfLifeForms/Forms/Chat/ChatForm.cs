@@ -23,10 +23,14 @@ namespace GameOfLifeForms.Forms.Chat
         private void ChatForm_Load(object sender, EventArgs e)
         {
             _client = new ChatClientSocket();
-            _client.OnMessageReceived += OnMessageReceived;
-            Task.Run(() => TryConnect());
+            _client.OnMessageReceived += OnMessageReceived; //Starts listening to message event
+            Task.Run(() => TryConnect()); //Starts connection thread
         }
 
+        /// <summary>
+        /// Triggers when a message is received
+        /// </summary>
+        /// <param name="message"></param>
         private void OnMessageReceived(string message)
         {
             if (InvokeRequired)
@@ -37,6 +41,9 @@ namespace GameOfLifeForms.Forms.Chat
             AddExternalMessage(message);
         }
 
+        /// <summary>
+        /// When connection is established, show chat
+        /// </summary>
         private void ShowChat()
         {
             labelConnecting.Visible = false;
@@ -44,6 +51,9 @@ namespace GameOfLifeForms.Forms.Chat
             panelChatHistory.Visible = true;
         }
 
+        /// <summary>
+        /// Try to connect to client socket
+        /// </summary>
         private void TryConnect()
         {
             try
@@ -58,12 +68,21 @@ namespace GameOfLifeForms.Forms.Chat
             }
         }
 
+        /// <summary>
+        /// Sends a message to socket client
+        /// Adds the message to the chat history
+        /// </summary>
+        /// <param name="message"></param>
         private void SendMessage(string message)
         {
             _client.SendMessage(message);
             AddOwnMessage(message);
         }
 
+        /// <summary>
+        /// Adds a message sent by this client to the chat history
+        /// </summary>
+        /// <param name="message"></param>
         private void AddOwnMessage(string message)
         {
             //Adds a panelMessage to the right of the panel
@@ -74,6 +93,10 @@ namespace GameOfLifeForms.Forms.Chat
             panelMessage.Location = new Point(panelChatHistory.Width - panelMessage.Width - 20, panelChatHistory.Controls.Count * 40);
         }
 
+        /// <summary>
+        /// Adds a message received from another client to the chat history
+        /// </summary>
+        /// <param name="message"></param>
         private void AddExternalMessage(string message)
         {
             //Adds a panelMessage to the left of the panel
@@ -84,6 +107,11 @@ namespace GameOfLifeForms.Forms.Chat
             panelMessage.Location = new Point(20, panelChatHistory.Controls.Count * 40);
         }
 
+        /// <summary>
+        /// Sends message when enter is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxChatInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -98,6 +126,11 @@ namespace GameOfLifeForms.Forms.Chat
             }
         }
 
+        /// <summary>
+        /// Blocks new lines from being inserted whenever enter is pressed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxChatInput_KeyPress(object sender, KeyPressEventArgs e)
         {
             //if key = enter
@@ -111,6 +144,11 @@ namespace GameOfLifeForms.Forms.Chat
             }
         }
 
+        /// <summary>
+        /// Disconnects client when form is closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChatForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             try

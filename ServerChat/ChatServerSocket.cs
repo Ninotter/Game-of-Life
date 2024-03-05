@@ -4,6 +4,10 @@ using System.Text;
 
 namespace ServerChat
 {
+    /// <summary>
+    /// Server side of the chat application
+    /// Should have only one instance running (implement singleton + mutex?)
+    /// </summary>
     internal class ChatServerSocket
     {
         private Socket clientSocket;
@@ -18,16 +22,22 @@ namespace ServerChat
             this.clientSocket = clientSocket;
         }
 
+        /// <summary>
+        /// Listening thread
+        /// NOTE: Once a client disconnects, the loop doesn't stop, tried to fix it but couldn't
+        /// </summary>
         internal void Listen()
         {
+            //Starts a listening thread
             Task.Run(async () => { 
-                while (clientSocket.Connected) { 
+                while (clientSocket.Connected) //Never stops listening
+                { 
                     byte[] buffer = new byte[1024];
-                    await clientSocket.ReceiveAsync(buffer, SocketFlags.None);
+                    await clientSocket.ReceiveAsync(buffer, SocketFlags.None); //Blocks thread until a message is received
                     Log.Write(LogType.Warning, "Received message");
                     string message = Encoding.UTF8.GetString(buffer).Trim('\0');
                     Log.Write(LogType.Info, $"Message received from Task {this.Id} : {message}");
-                    BroadcastMessage(message);
+                    BroadcastMessage(message); //Broadcast received message to all clients
                 }
                 OnClientDisconnected();
             });

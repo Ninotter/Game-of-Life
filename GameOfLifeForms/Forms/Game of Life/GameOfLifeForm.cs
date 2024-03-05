@@ -5,16 +5,33 @@ namespace GameOfLifeForms.Forms
 {
     internal partial class GameOfLifeForm : Form, IGameOfLifeHost
     {
+        /// <summary>
+        /// Thread that refreshes the image of the game of life
+        /// </summary>
         Thread refreshImageThread;
 
+        /// <summary>
+        /// Sets the time to wait between each generation
+        /// </summary>
         private int SleepSpeed { get; set; }
 
+        /// <summary>
+        /// Game of life manager
+        /// </summary>
         private GoLManager GoLManager { get; set; }
 
+        /// <summary>
+        /// Array storing the state of the game of life
+        /// </summary>
         bool[,] golArray;
 
+        /// <summary>
+        /// Manages the list of events awaiting to be executed
+        /// Such as creating a glider at a specific position
+        /// </summary>
         List<Action> awaitingEvents = new List<Action>();
 
+        // IGameOfLifeHost implementation
         public byte Underpopulation { get => GoLManager.UnderPopulation; set { GoLManager.UnderPopulation = value; } }
         public byte Overpopulation { get => GoLManager.OverPopulation; set { GoLManager.OverPopulation = value; } }
         public byte Reproduction { get => GoLManager.Reproduction; set { GoLManager.Reproduction = value; } }
@@ -32,7 +49,9 @@ namespace GameOfLifeForms.Forms
 
         public void StartGame()
         {
+            // Stop the previous game
             refreshImageThread?.Interrupt();
+            // Start a new game
             Thread t = new Thread(() =>
             {
                 golArray = GoLManager.CreateRandomArray(180, 100);
@@ -40,8 +59,11 @@ namespace GameOfLifeForms.Forms
                 {
                     while (true)
                     {
+                        //Create a bitmap from the current array and replace the current image
                         ReplaceBitmap(CreateConwayBitmap(golArray));
+                        //Calculate the next generation
                         golArray = GoLManager.NextGeneration(golArray);
+
                         HandleAwaitingEvents();
                         Thread.Sleep(SleepSpeed);
                     }
@@ -72,6 +94,11 @@ namespace GameOfLifeForms.Forms
             }));
         }
 
+        /// <summary>
+        /// Creates a bitmap from the game of life array
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
         private Bitmap CreateConwayBitmap(bool[,] array)
         {
             Bitmap bitmap = new Bitmap(array.GetLength(0) * 9, array.GetLength(1) * 9);
@@ -119,6 +146,11 @@ namespace GameOfLifeForms.Forms
             OpenRegisterForm();
         }
 
+        /// <summary>
+        /// Kills image generation thread on close
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameOfLifeForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             refreshImageThread?.Interrupt();
@@ -129,6 +161,12 @@ namespace GameOfLifeForms.Forms
             OpenChatForm();
         }
 
+        /// <summary>
+        /// Triggers whenever the slider is moved
+        /// Changes the speed of the game of life according to the slider value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void trackBarSpeed_Scroll(object sender, EventArgs e)
         {
             SleepSpeed = 1000 - trackBarSpeed.Value * 100;

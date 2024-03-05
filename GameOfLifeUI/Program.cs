@@ -1,5 +1,8 @@
 ﻿using GameOfLifeAPI;
 
+/////CLI version of the Game of Life
+/////Early tests, use GameOfLifeForms for the final version
+
 bool[,] currentGeneration = new bool[25, 100];
 Random rnd = new Random();
 for (int i = 0; i < currentGeneration.GetLength(0); i++)
